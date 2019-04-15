@@ -45,7 +45,7 @@ for i in range(0,100,20):
         cur.execute("INSERT INTO Spotify_top (title, artist) VALUES (?, ?)", (__title, __artist))
 conn.commit() #commit the changes to the database
 
-#Calculate data from sqlite
+#Calculate data from Billboard.com
 conn = sqlite3.connect("Billboard_top.sqlite")
 cur = conn.cursor()
 
@@ -55,7 +55,7 @@ for row in cur:
     artist = row[1]
     artist_dict[artist] = artist_dict.get(artist, 0) + 1
 
-# Get the data that needs to be plotted on x-axis
+#Get the data from Billboard.com that needs to be plotted on x-axis
 xvals = ['Lil Nas X', 'Post Malone & Swae Lee', 'Ariana Grande', 'Post Malone', 'Halsey',
     'Cardi B & Bruno Mars', 'Billie Eilish', 'Jonas Brothers', 'Marshmello & Bastille', 'J. Cole',
     'Lady Gaga & Bradley Cooper', 'benny blanco, Halsey & Khalid', 'Blueface', 'Meek Mill Featuring Drake', 
@@ -75,7 +75,7 @@ xvals = ['Lil Nas X', 'Post Malone & Swae Lee', 'Ariana Grande', 'Post Malone', 
     'Nipsey Hussle Featuring Kendrick Lamar', 'Chris Stapleton', 'Florida Georgia Line', 'Ski Mask The Slump God', 
     'Jason Aldean', 'Polo G Featuring Lil Tjay']
 
-# Get the data that needs to be plotted on y-axis
+#Get the data from Billboard.com that needs to be plotted on y-axis
 yvals = [artist_dict['Lil Nas X'], artist_dict['Post Malone & Swae Lee'], artist_dict['Ariana Grande'], artist_dict['Post Malone'], artist_dict['Halsey'],
     artist_dict['Cardi B & Bruno Mars'], artist_dict['Billie Eilish'], artist_dict['Jonas Brothers'], artist_dict['Marshmello & Bastille'], artist_dict['J. Cole'],
     artist_dict['Lady Gaga & Bradley Cooper'], artist_dict['benny blanco, Halsey & Khalid'], artist_dict['Blueface'], artist_dict['Meek Mill Featuring Drake'], 
@@ -95,20 +95,72 @@ yvals = [artist_dict['Lil Nas X'], artist_dict['Post Malone & Swae Lee'], artist
     artist_dict['Nipsey Hussle Featuring Kendrick Lamar'], artist_dict['Chris Stapleton'], artist_dict['Florida Georgia Line'], artist_dict['Ski Mask The Slump God'], 
     artist_dict['Jason Aldean'], artist_dict['Polo G Featuring Lil Tjay']]
 
-#2. plot the bar chart with xvals and yvals. Align the bars in center and assign a color to each bar.
-plt.bar(xvals, yvals, align='center', color = ["green"])
+#Plot the bar chart with xvals and yvals. Align the bars in center and assign a color to each bar.
+plt.bar(xvals, yvals, align='center', width =10.0, color = ["green"])
 
-#3.Give ylabel to the plot
+#Give ylabel to the plot
 plt.ylabel("Number of Songs Artist has on Billboard Top 100 List")
 
-#4.Give xlabel to the plot
+#Give xlabel to the plot
 plt.xlabel("Artist Name")
 
-#5.Give the title to the plot
+#Give the title to the plot
 plt.title("Amount of Songs Each Artist Has on the Billboard Top 100 List") 
 
-#6.Save the plot as a .png file
+#Adjust the placement of the x-axis labels 
+plt.xticks(xvals, rotation='vertical', fontsize = 4, va="bottom", ha='left') 
+
+#Save the plot as a .png file
 plt.savefig("billboard_artist_freq.png")
 
-#7.Show the plot
-#plt.show()
+#Show the plot
+plt.show()
+
+#Calculate data from Spotify
+conn = sqlite3.connect("Spotify_top.sqlite")
+cur = conn.cursor()
+
+cur.execute("SELECT * FROM Spotify_top")
+spotify_artist_dict = {}
+for row in cur:
+    spotify_artist = row[1]
+    spotify_artist_dict[spotify_artist] = spotify_artist_dict.get(artist, 0) + 1
+
+#Get the data from Spotify that needs to be plotted on x-axis
+x_values = ['J. Cole', 'Lil Nas X', 'Billie Eilish', 'Jonas Brothers', 'Ariana Grande', 'Mustard', 'YNW Melly', 'Juice WRLD', 'Khalid', 
+    'Sam Smith', 'Cardi B', 'Lauv', 'Marshmello', 'Lil Skies', 'Daddy Yankee', 'Mabel', 'benny blanco', 'Offset', 'Maren Morris', 'Nipsey Hussle', 
+    'Khelani', 'Logic', 'Ozuna', 'FLETCHER', 'Anuel Aa', 'Rich The Kid', 'Polo G', 'Tory Lane', 'Bebe Rexha', 'YK Osiris', 'NLE Choppa', 
+    'Blueface', 'ScHoolboy Q', 'Post Malone', 'Lil Uzi Vert', 'P!nk', 'Future', 'Lil Peep', 'YUNGBLUD', 'Why Don’t We, Gunna']
+
+#Get the data from Spotify that needs to be plotted on y-axis
+y_values = [spotify_artist_dict['J. Cole'], spotify_artist_dict['Lil Nas X'], spotify_artist_dict['Billie Eilish'], spotify_artist_dict['Jonas Brothers'], 
+    spotify_artist_dict['Ariana Grande'], spotify_artist_dict['Mustard'], spotify_artist_dict['YNW Melly'], spotify_artist_dict['Juice WRLD'], 
+    spotify_artist_dict['Khalid'], spotify_artist_dict['Sam Smith'], spotify_artist_dict['Cardi B'], spotify_artist_dict['Lauv'], 
+    spotify_artist_dict['Marshmello'], spotify_artist_dict['Lil Skies'], spotify_artist_dict['Daddy Yankee'], spotify_artist_dict['Mabel'], 
+    spotify_artist_dict['benny blanco'], spotify_artist_dict['Offset'], spotify_artist_dict['Maren Morris'], spotify_artist_dict['Nipsey Hussle'], 
+    spotify_artist_dict['Khelani'], spotify_artist_dict['Logic'], spotify_artist_dict['Ozuna'], spotify_artist_dict['FLETCHER'], 
+    spotify_artist_dict['Anuel Aa'], spotify_artist_dict['Rich The Kid'], spotify_artist_dict['Polo G'], spotify_artist_dict['Tory Lane'], 
+    spotify_artist_dict['Bebe Rexha'], spotify_artist_dict['YK Osiris'], spotify_artist_dict['NLE Choppa'], spotify_artist_dict['Blueface'], 
+    spotify_artist_dict['ScHoolboy Q'], spotify_artist_dict['Post Malone'], spotify_artist_dict['Lil Uzi Vert'], spotify_artist_dict['P!nk'], 
+    spotify_artist_dict['Future'], spotify_artist_dict['Lil Peep'], spotify_artist_dict['YUNGBLUD'], spotify_artist_dict['Why Don’t We, Gunna']]
+
+#Plot the bar chart with xvals and yvals. Align the bars in center and assign a color to each bar.
+plt.bar(x_values, y_values, align='center', width =10.0, color = ["blue"])
+
+#Give ylabel to the plot
+plt.ylabel("Number of Songs Artist has on Spotify Top 100 List")
+
+#Give xlabel to the plot
+plt.xlabel("Artist Name")
+
+#Give the title to the plot
+plt.title("Amount of Songs Each Artist Has on the Spotify Top 100 List") 
+
+#Adjust the placement of the x-axis labels 
+plt.xticks(x_values, rotation='vertical', fontsize = 4, va="bottom", ha='left') 
+
+#Save the plot as a .png file
+plt.savefig("spotify_artist_freq.png")
+
+#Show the plot
+plt.show()
